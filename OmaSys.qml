@@ -22,7 +22,7 @@ Item {
   property string filterText: ""
   property string sortKey: "cpu"
   property bool sortDescending: true
-  property int selectedIndex: 0
+  property int selectedIndex: -1
   property int selectedPid: 0
   property var allProcesses: []
 
@@ -201,8 +201,8 @@ Item {
       if (row.pid === previousSelection) nextIndex = i
     }
 
-    if (displayModel.count === 0) {
-      root.selectedIndex = 0
+    if (displayModel.count === 0 || previousSelection === 0) {
+      root.selectedIndex = -1
       root.selectedPid = 0
     } else {
       if (nextIndex < 0) nextIndex = Math.max(0, Math.min(root.selectedIndex, displayModel.count - 1))
@@ -210,15 +210,21 @@ Item {
       root.selectedPid = displayModel.get(nextIndex).pid
     }
     Qt.callLater(function() {
-      if (displayModel.count > 0) processList.positionViewAtIndex(root.selectedIndex, ListView.Contain)
+      if (root.selectedIndex >= 0 && root.selectedIndex < displayModel.count)
+        processList.positionViewAtIndex(root.selectedIndex, ListView.Contain)
     })
+  }
+
+  function clearSelection() {
+    root.selectedIndex = -1
+    root.selectedPid = 0
   }
 
   function setFilter(value) {
     root.filterText = String(value || "")
-    root.selectedIndex = 0
-    root.selectedPid = 0
+    root.clearSelection()
     root.rebuildDisplay()
+    Qt.callLater(function() { processList.positionViewAtBeginning() })
   }
 
   function setSort(key) {
@@ -227,7 +233,9 @@ Item {
       root.sortKey = key
       root.sortDescending = key !== "command" && key !== "user"
     }
+    root.clearSelection()
     root.rebuildDisplay()
+    Qt.callLater(function() { processList.positionViewAtBeginning() })
   }
 
   function sortMarker(key) {
@@ -839,7 +847,8 @@ Item {
                 cursorShape: Qt.PointingHandCursor
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onClicked: function(mouse) {
-                  root.selectIndex(processRow.index)
+                  if (mouse.button === Qt.LeftButton && processRow.selected) root.clearSelection()
+                  else root.selectIndex(processRow.index)
                   if (mouse.button === Qt.RightButton) root.requestAction("term")
                   keyCatcher.forceActiveFocus()
                 }
