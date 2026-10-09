@@ -57,7 +57,7 @@ function matchingBrace(source, openingBrace) {
 }
 
 const repoDir = path.join(__dirname, "..");
-const qmlFiles = ["OmaSys.qml", "BarWidget.qml"];
+const qmlFiles = ["SysMon.qml", "BarWidget.qml"];
 let textSinkCount = 0;
 
 for (const filename of qmlFiles) {
@@ -82,7 +82,7 @@ for (const filename of qmlFiles) {
 
 assert.ok(textSinkCount > 0, "Expected to inspect at least one QML Text sink");
 
-const panelSource = fs.readFileSync(path.join(repoDir, "OmaSys.qml"), "utf8");
+const panelSource = fs.readFileSync(path.join(repoDir, "SysMon.qml"), "utf8");
 assert.match(panelSource, /^\s*SafeConfirmDialog\s*\{/m);
 assert.doesNotMatch(panelSource, /^\s*ConfirmDialog\s*\{/m);
 

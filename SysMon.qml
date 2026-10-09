@@ -62,7 +62,7 @@ Item {
   property var previousNetwork: null
   property var previousProcessCpu: null
 
-  readonly property string pluginId: manifest && manifest.id ? String(manifest.id) : "omasys.task-manager"
+  readonly property string pluginId: manifest && manifest.id ? String(manifest.id) : "kyeotic.sysmon"
   readonly property string pluginDir: Model.pluginDirFrom(Qt.resolvedUrl("."), Quickshell.env("HOME"), pluginId)
 
   readonly property color background: Color.menu.background
@@ -264,13 +264,13 @@ Item {
     if (!process || actionProc.running) return
     if (process.pid <= 1) {
       root.actionSucceeded = false
-      root.actionMessage = "PID 1 is protected and cannot be controlled by OmaSys"
+      root.actionMessage = "PID 1 is protected and cannot be controlled by SysMon"
       actionMessageTimer.restart()
       return
     }
     if (root.currentUid >= 0 && process.uid !== root.currentUid) {
       root.actionSucceeded = false
-      root.actionMessage = "This process belongs to another user and cannot be controlled by OmaSys"
+      root.actionMessage = "This process belongs to another user and cannot be controlled by SysMon"
       actionMessageTimer.restart()
       return
     }
@@ -427,7 +427,7 @@ Item {
     visible: root.opened
     anchors { top: true; bottom: true; left: true; right: true }
     color: "transparent"
-    WlrLayershell.namespace: "omasys-task-manager"
+    WlrLayershell.namespace: "sysmon"
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
     exclusionMode: ExclusionMode.Ignore
@@ -554,7 +554,7 @@ Item {
 
             Text {
               id: headerTitle
-              text: "OmaSys  /  Task Manager"
+              text: "SysMon  /  Task Manager"
               textFormat: Text.PlainText
               color: root.foreground
               font.family: root.fontFamily

@@ -7,7 +7,7 @@ import "Model.js" as Model
 
 BarWidget {
   id: root
-  moduleName: "omasys.task-manager"
+  moduleName: "kyeotic.sysmon"
 
   property real cpuPercent: 0
   property real memoryPercent: 0
@@ -79,7 +79,7 @@ BarWidget {
     horizontalMargin: root.iconMode ? 7.5 : 8.75
     verticalPadding: 7
     concealed: root.collapsed
-    tooltipText: root.iconMode ? "OmaSys task manager" : "OmaSys task manager · right-click to refresh"
+    tooltipText: root.iconMode ? "SysMon task manager" : "SysMon task manager · right-click to refresh"
     active: !root.iconMode && (root.cpuPercent >= 90 || root.memoryPercent >= 90 || root.gpuPercent >= 90)
     onPressed: function(buttonCode) {
       if (buttonCode === Qt.RightButton) { if (!root.iconMode) root.refresh() }

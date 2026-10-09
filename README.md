@@ -1,15 +1,17 @@
-# OmaSys
+# SysMon
 
-OmaSys is a native task manager for the Omarchy Quattro shell. It adds a compact CPU, RAM, and GPU readout to the bar and opens a full system dashboard with live resource usage, searchable processes, sorting, and confirmed process controls.
+SysMon is a native task manager for the Omarchy Quattro shell. It adds a compact CPU, RAM, and GPU readout to the bar and opens a full system dashboard with live resource usage, searchable processes, sorting, and confirmed process controls.
 
-![Release: 1.0.1](https://img.shields.io/badge/release-1.0.1-brightgreen)
+![Release: 1.0.0](https://img.shields.io/badge/release-1.0.0-brightgreen)
 ![Omarchy: Quattro](https://img.shields.io/badge/Omarchy-Quattro-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
+
+SysMon is a fork of [OmaSys](https://github.com/rookepoole/omasys) by Rooke Poole, which is no longer actively maintained. See [Origin](#origin) for what changed and how to migrate.
 
 ## Highlights
 
 - Live CPU, memory, GPU, swap, root-disk, network, temperature, load, and uptime metrics.
-- Bar widget with CPU, RAM, and GPU utilization; left-click opens OmaSys and right-click refreshes it.
+- Bar widget with CPU, RAM, and GPU utilization; left-click opens SysMon and right-click refreshes it.
 - Up to 600 processes sampled every two seconds.
 - Instant filtering by PID, user, executable name, or full command line.
 - Sorting by CPU, memory, name, or PID.
@@ -26,10 +28,10 @@ OmaSys is a native task manager for the Omarchy Quattro shell. It adds a compact
 
 ## Review before installation
 
-Omarchy plugins run unsandboxed inside the long-lived shell process. Review at least these files before enabling OmaSys:
+Omarchy plugins run unsandboxed inside the long-lived shell process. Review at least these files before enabling SysMon:
 
 - `manifest.json` — plugin identity, kinds, and entry points.
-- `OmaSys.qml` — full overlay and process-control UI.
+- `SysMon.qml` — full overlay and process-control UI.
 - `BarWidget.qml` — compact resource sampler and launcher.
 - `scripts/collect-system.sh` — read-only system metrics.
 - `scripts/list-processes.sh` — read-only process sampling.
@@ -53,24 +55,24 @@ Validation is read-only. The test suite creates one temporary `sleep` process ow
 Install the public release and enable its bar widget:
 
 ```bash
-omarchy plugin add https://github.com/rookepoole/omasys.git --enable
+omarchy plugin add https://github.com/kyeotic/sysmon.git --enable
 ```
 
-OmaSys declares `right` as its default bar section. Move it later if desired:
+SysMon declares `right` as its default bar section. Move it later if desired:
 
 ```bash
-omarchy bar move omasys.task-manager --section right
+omarchy bar move kyeotic.sysmon --section right
 ```
 
 To review a local checkout before enabling it:
 
 ```bash
-git clone https://github.com/rookepoole/omasys.git
-cd omasys
+git clone https://github.com/kyeotic/sysmon.git
+cd sysmon
 omarchy plugin validate .
 ./tests/run.sh
 omarchy plugin add "$PWD"
-omarchy plugin enable omasys.task-manager --section right
+omarchy plugin enable kyeotic.sysmon --section right
 ```
 
 ## Bar widget settings
@@ -78,7 +80,7 @@ omarchy plugin enable omasys.task-manager --section right
 Settings go on the widget's entry in `~/.config/omarchy/shell.json`:
 
 ```json
-{ "id": "omasys.task-manager", "display": "icon", "icon": "󰅌" }
+{ "id": "kyeotic.sysmon", "display": "icon", "icon": "󰅌" }
 ```
 
 | Setting | Values | Default |
@@ -87,14 +89,14 @@ Settings go on the widget's entry in `~/.config/omarchy/shell.json`:
 | `icon` | Any glyph available in the bar font; used only when `display` is `"icon"` | `󰅌` (clipboard) |
 | `collapse` | `true` hides the icon until hovering the bar's center section reveals the inactive indicators; used only when `display` is `"icon"` | `false` |
 
-Left-click opens OmaSys in either mode. Right-click refreshes only in `stats` mode.
+Left-click opens SysMon in either mode. Right-click refreshes only in `stats` mode.
 
-## Open and control OmaSys
+## Open and control SysMon
 
 Click the bar readout, or summon it directly:
 
 ```bash
-omarchy-shell shell toggle omasys.task-manager '{}'
+omarchy-shell shell toggle kyeotic.sysmon '{}'
 ```
 
 Keyboard controls:
@@ -118,20 +120,27 @@ Right-clicking or double-clicking a process row opens the clean-end confirmation
 ## Safe removal
 
 ```bash
-omarchy plugin remove omasys.task-manager
+omarchy plugin remove kyeotic.sysmon
 ```
 
-Removal deletes only the plugin checkout managed by Omarchy and its bar/config reference. OmaSys creates no services, hooks, caches, credentials, logs, or state files, so there is no secondary cleanup step.
+Removal deletes only the plugin checkout managed by Omarchy and its bar/config reference. SysMon creates no services, hooks, caches, credentials, logs, or state files, so there is no secondary cleanup step.
 
 ## Data and privacy
 
-OmaSys reads local kernel and process information only while its UI or bar widget is active. It does not transmit data, persist process lists, record command lines, or contact the network. See [SECURITY.md](SECURITY.md) for the detailed trust boundary.
+SysMon reads local kernel and process information only while its UI or bar widget is active. It does not transmit data, persist process lists, record command lines, or contact the network. See [SECURITY.md](SECURITY.md) for the detailed trust boundary.
 
-## Release and marketplace
+## Origin
 
-OmaSys 1.0.1 is the current release. Version 1.0.0 was validated, exercised in a live Omarchy Quattro session, and [submitted to the Omarchy plugin marketplace](https://github.com/HANCORE-linux/omarchy-plugin-marketplace/issues/2697) in the `System` category with the `Bar`, `Quickshell`, and `System` tags. The detailed runtime evidence is in [REVIEW.md](REVIEW.md), and the publication record is in [PUBLISH_CHECKLIST.md](PUBLISH_CHECKLIST.md).
+SysMon started as a fork of [rookepoole/omasys](https://github.com/rookepoole/omasys) at OmaSys 1.0.1, used under the MIT license. The last commit before the rename is tagged `pre-split` so that changes can still be offered back upstream. See [CHANGELOG.md](CHANGELOG.md) for what changed after the fork.
 
-The marketplace publishing guide requires a public GitHub repository, a valid root manifest, README, license, and safe installation/removal. See the [Omarchy Plugins publishing guide](https://omarchyplugins.com/publish.html) and the [official Omarchy shell plugin reference](https://github.com/basecamp/omarchy/blob/quattro/shell/README.md).
+SysMon uses a new plugin ID, `kyeotic.sysmon`. To migrate from OmaSys, remove the old plugin, install SysMon, and change `omasys.task-manager` to `kyeotic.sysmon` in any widget entry in `~/.config/omarchy/shell.json`:
+
+```bash
+omarchy plugin remove omasys.task-manager
+omarchy plugin add https://github.com/kyeotic/sysmon.git --enable
+```
+
+For Omarchy plugin development, see the [official Omarchy shell plugin reference](https://github.com/basecamp/omarchy/blob/quattro/shell/README.md).
 
 ## License
 

@@ -46,4 +46,4 @@ printf '%s\n' "$action_output" | grep -q '^OK'
 wait "$test_pid" 2>/dev/null || true
 trap - EXIT INT TERM
 
-printf 'All OmaSys tests passed.\n'
+printf 'All SysMon tests passed.\n'

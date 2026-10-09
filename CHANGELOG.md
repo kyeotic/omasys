@@ -1,8 +1,15 @@
 # Changelog
 
-All notable changes to OmaSys are documented here.
+All notable changes to SysMon are documented here.
 
-## Unreleased
+## 1.0.0 - Unreleased
+
+First release as SysMon, forked from [OmaSys](https://github.com/rookepoole/omasys) 1.0.1.
+
+### Changed
+
+- Renamed the plugin to SysMon with the plugin ID `kyeotic.sysmon`. Existing OmaSys installs must be removed and re-added under the new ID.
+- Clicking a selected process row again, sorting, or filtering clears the list selection.
 
 ### Added
 
@@ -10,20 +17,28 @@ All notable changes to OmaSys are documented here.
 - Bar widget `icon` setting to override the icon-mode glyph (default: clipboard).
 - Bar widget `collapse` setting that hides the icon until the bar reveals its inactive indicators on hover.
 
-## 1.0.1 - 2026-08-27
+### Fixed
 
-### Security
+- Resolve the plugin folder without relying on `manifest.__sourceDir`.
+
+## OmaSys history
+
+Releases published upstream as OmaSys, before the fork.
+
+### OmaSys 1.0.1 - 2026-08-27
+
+#### Security
 
 - Force every plugin-owned QML `Text` sink to render plain text so process, filter, diagnostic, and host metadata cannot be interpreted as rich-text markup or initiate resource loads.
 - Replace the shell-provided confirmation dialog with a theme-compatible local dialog that preserves literal process names with plain-text rendering.
 
-### Tests
+#### Tests
 
 - Add a regression check that requires `Text.PlainText` on every native QML `Text` sink and prevents reintroduction of the unsafe shared confirmation dialog.
 
-## 1.0.0 - 2026-08-27
+### OmaSys 1.0.0 - 2026-08-27
 
-### Added
+#### Added
 
 - CPU, RAM, and GPU bar widget with threshold highlighting.
 - Full Omarchy-native task-manager overlay.

@@ -20,7 +20,7 @@ const systemSample = [
   "NET\t100000\t50000",
   "GPU\t67",
   "TEMP\t55000",
-  "META\tomasys-host\t6.0-test\tOmarchy\tTest CPU\t8\t1000",
+  "META\tsysmon-host\t6.0-test\tOmarchy\tTest CPU\t8\t1000",
   ""
 ].join("\n");
 
@@ -32,7 +32,7 @@ assert.equal(Math.round(stats.swapPercent), 75);
 assert.equal(stats.diskPercent, 40);
 assert.equal(stats.gpuPercent, 67);
 assert.equal(stats.temperatureC, 55);
-assert.equal(stats.hostname, "omasys-host");
+assert.equal(stats.hostname, "sysmon-host");
 assert.equal(stats.currentUid, 1000);
 assert.ok(stats.networkRxPerSecond > 0);
 
@@ -65,8 +65,8 @@ assert.equal(context.formatBytes(1024), "1.00 KiB");
 assert.equal(context.formatDuration(90061), "1d 1h");
 assert.equal(context.stateLabel("T+"), "Stopped");
 
-assert.equal(context.pluginDirFrom("file:///home/me/my%20plugins/omasys/", "/home/me", "omasys.task-manager"), "/home/me/my plugins/omasys");
-assert.equal(context.pluginDirFrom("qs:@/plugins/omasys/", "/home/me/", "omasys.task-manager"), "/home/me/.config/omarchy/plugins/omasys.task-manager");
-assert.equal(context.pluginDirFrom("", "", "omasys.task-manager"), "");
+assert.equal(context.pluginDirFrom("file:///home/me/my%20plugins/sysmon/", "/home/me", "kyeotic.sysmon"), "/home/me/my plugins/sysmon");
+assert.equal(context.pluginDirFrom("qs:@/plugins/sysmon/", "/home/me/", "kyeotic.sysmon"), "/home/me/.config/omarchy/plugins/kyeotic.sysmon");
+assert.equal(context.pluginDirFrom("", "", "kyeotic.sysmon"), "");
 
 process.stdout.write("Model tests passed\n");
