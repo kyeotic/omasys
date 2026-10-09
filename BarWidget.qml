@@ -14,6 +14,14 @@ BarWidget {
   property real gpuPercent: -1
   property var previousCpu: null
 
+  // shell.json entry settings: "display" is "stats" (default) or "icon";
+  // "icon" overrides the glyph shown in icon mode (default: nf-md-clipboard_outline);
+  // "collapse" hides the icon until the bar reveals its inactive indicators.
+  readonly property bool iconMode: root.setting("display", "stats") === "icon"
+  readonly property string iconGlyph: String(root.setting("icon", "\udb80\udd4c"))
+  readonly property bool collapsed: iconMode && root.setting("collapse", false) === true
+    && !(bar && bar.centerSectionRevealHeld === true && bar.centerHoverRevealSuppressed !== true)
+
   readonly property string pluginDir: Model.pluginDirFrom(Qt.resolvedUrl("."), Quickshell.env("HOME"), root.moduleName)
   readonly property string displayText: vertical
     ? "C " + Math.round(cpuPercent) + "%\nR " + Math.round(memoryPercent) + "%\nG "
@@ -39,16 +47,17 @@ BarWidget {
       root.bar.shell.toggle(root.moduleName, "{}")
   }
 
-  implicitWidth: button.implicitWidth
-  implicitHeight: button.implicitHeight
+  implicitWidth: root.collapsed && !root.vertical ? 0 : button.implicitWidth
+  implicitHeight: root.collapsed && root.vertical ? 0 : button.implicitHeight
 
-  onPluginDirChanged: if (pluginDir !== "") refresh()
-  Component.onCompleted: refresh()
+  onPluginDirChanged: if (pluginDir !== "" && !iconMode) refresh()
+  onIconModeChanged: if (!iconMode) refresh()
+  Component.onCompleted: if (!iconMode) refresh()
 
   Timer {
     interval: 3000
     repeat: true
-    running: root.visible
+    running: root.visible && !root.iconMode
     onTriggered: root.refresh()
   }
 
@@ -65,14 +74,15 @@ BarWidget {
     id: button
     anchors.fill: parent
     bar: root.bar
-    text: root.displayText
-    fixedHeight: root.vertical ? Style.bar.iconSlot * 3 : -1
-    horizontalMargin: 8.75
+    text: root.iconMode ? root.iconGlyph : root.displayText
+    fixedHeight: root.vertical && !root.iconMode ? Style.bar.iconSlot * 3 : -1
+    horizontalMargin: root.iconMode ? 7.5 : 8.75
     verticalPadding: 7
-    tooltipText: "OmaSys task manager · right-click to refresh"
-    active: root.cpuPercent >= 90 || root.memoryPercent >= 90 || root.gpuPercent >= 90
+    concealed: root.collapsed
+    tooltipText: root.iconMode ? "OmaSys task manager" : "OmaSys task manager · right-click to refresh"
+    active: !root.iconMode && (root.cpuPercent >= 90 || root.memoryPercent >= 90 || root.gpuPercent >= 90)
     onPressed: function(buttonCode) {
-      if (buttonCode === Qt.RightButton) root.refresh()
+      if (buttonCode === Qt.RightButton) { if (!root.iconMode) root.refresh() }
       else root.toggleTaskManager()
     }
   }

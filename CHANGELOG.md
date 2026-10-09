@@ -2,6 +2,14 @@
 
 All notable changes to OmaSys are documented here.
 
+## Unreleased
+
+### Added
+
+- Bar widget `display` setting: `"icon"` replaces the live CPU/RAM/GPU readout with a static glyph and stops bar sampling.
+- Bar widget `icon` setting to override the icon-mode glyph (default: clipboard).
+- Bar widget `collapse` setting that hides the icon until the bar reveals its inactive indicators on hover.
+
 ## 1.0.1 - 2026-08-27
 
 ### Security

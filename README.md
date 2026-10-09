@@ -73,6 +73,22 @@ omarchy plugin add "$PWD"
 omarchy plugin enable omasys.task-manager --section right
 ```
 
+## Bar widget settings
+
+Settings go on the widget's entry in `~/.config/omarchy/shell.json`:
+
+```json
+{ "id": "omasys.task-manager", "display": "icon", "icon": "󰅌" }
+```
+
+| Setting | Values | Default |
+| --- | --- | --- |
+| `display` | `"stats"` shows live CPU, RAM, and GPU usage; `"icon"` shows a single static glyph and stops bar sampling | `"stats"` |
+| `icon` | Any glyph available in the bar font; used only when `display` is `"icon"` | `󰅌` (clipboard) |
+| `collapse` | `true` hides the icon until hovering the bar's center section reveals the inactive indicators; used only when `display` is `"icon"` | `false` |
+
+Left-click opens OmaSys in either mode. Right-click refreshes only in `stats` mode.
+
 ## Open and control OmaSys
 
 Click the bar readout, or summon it directly:
